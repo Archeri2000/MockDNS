@@ -5,6 +5,7 @@ import (
 	"io/ioutil"
 	"os"
 	"path/filepath"
+	"regexp"
 	"strings"
 )
 
@@ -214,8 +215,7 @@ func FormatFileContents(filename string) ([]string, error) {
 	//Attempt to read file
 	file, err := FileToList(filename)
 	if err == nil {
-		// Strip comments
-		file = StripEmptyAndComments(file)
+		// Parse strings
 		file = ParseStrings(file)
 		return file, nil
 	} else {
@@ -263,8 +263,22 @@ func StripEmptyAndComments(arr []string) []string {
 
 // Parse array of strings to replace localhost with 127.0.0.1
 func ParseStrings(entry []string) []string {
+	entry = StripEmptyAndComments(entry)
 	for i := 0; i < len(entry); i++ {
+		entry[i] = strings.ReplaceAll(entry[i], "localhostv6", "::1")
 		entry[i] = strings.ReplaceAll(entry[i], "localhost", "127.0.0.1")
+		if ent := strings.Split(entry[i], " "); len(ent) != 2 || !isIP(ent[0]) {
+			fmt.Println(entry[i] + " omitted due to invalid format!")
+			entry = Remove(entry, i)
+			i -= 1
+		}
 	}
 	return entry
+}
+
+func isIP(str string) bool {
+	str = strings.ToLower(str)
+	isIPv4, _ := regexp.MatchString(`^\d+.\d+.\d+.\d+$`, str)
+	isIPv6, _ := regexp.MatchString(`^([a-f\d]*:)+\d*$`, str)
+	return isIPv4 || isIPv6
 }
