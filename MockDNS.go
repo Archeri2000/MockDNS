@@ -52,6 +52,26 @@ func main() {
 			} else {
 				fmt.Println("Invalid number of arguments!")
 			}
+		case "add-now", "remove-now":
+			if len(Args) == 3 {
+				str := ParseStrings([]string{strings.Join(Args[1:3], " ")})
+				if len(str) == 1 {
+					switch keyword {
+					case "add-now":
+						result, writeErr := CompareAndWrite(hosts, str, false, false)
+						if writeErr == nil {
+							_, _ = CompareAndWrite(changes, result, false, true)
+						}
+					case "remove-now":
+						_, writeErr := CompareAndWrite(hosts, str, true, false)
+						if writeErr == nil {
+							_, _ = CompareAndWrite(changes, str, true, true)
+						}
+					}
+				}
+			} else {
+				fmt.Println("Invalid number of arguments!")
+			}
 		case "reset", "show", "show-all":
 			if len(Args) == 1 {
 				switch keyword {
@@ -247,6 +267,9 @@ func ArrayToString(arr []string) string {
 
 // Removes a given index from an array of strings
 func Remove(arr []string, ind int) []string {
+	if ind >= len(arr) {
+		return arr
+	}
 	return append(arr[:ind], arr[ind+1:]...)
 }
 
