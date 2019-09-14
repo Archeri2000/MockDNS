@@ -9,9 +9,6 @@ import (
 	"strings"
 )
 
-// Windows DNS Hosts file
-var hosts = os.Getenv("SystemRoot") + "\\System32\\drivers\\etc\\hosts"
-
 // Appdata changes
 var exe, _ = os.Executable()
 var path = filepath.Dir(exe)
