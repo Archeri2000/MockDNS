@@ -1,0 +1,16 @@
+# HOW TO USE
+#
+# This file is a sample on how to format dns entries for mocking
+# Any line starting with # is treated as a comment and ignored
+#
+# Every non-comment line will only be properly processed if it contains two elements: an IP address(IPv4 or IPv6) and a Domain name separated by a space
+# e.g.
+# 1.1.1.1 sample.com
+# fe23:2001::1 sample
+#
+# Additionally, you can use localhost or localhostv6 as the IP
+# e.g.
+# localhost test.website -> 127.0.0.1 test.website
+# localhostv6 web.test -> ::1 web.test
+#
+# Do not include a port(e.g. localhost:50) as that is an invalid IP address for the DNS entry and will be rejected by the command. 
